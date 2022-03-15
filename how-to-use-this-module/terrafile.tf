@@ -1,16 +1,32 @@
-provider "hashicups" {
-  username = "mentoriaiac"
-  password = "2021@mentoria"
+provider "azurerm" {
+  skip_provider_registration = true
+  features {}
 }
 
-module "hashicups_order" {
-  source       = "../"
-  order = {
-    Terraspresso = 4,
-    Nomadicano = 10
-    }  
+resource "azurerm_resource_group" "rg" {
+  name     = "mentoria-rg"
+  location = "Central US"
 }
 
-output "hashicups_order_id" {
-  value = module.hashicups_order.order_id
+resource "azurerm_app_service_plan" "app" {
+  name                = "asp-mentoria-iac"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  kind                = "Linux"
+  reserved            = true
+
+  sku {
+    tier = "Standard"
+    size = "S1"
+  }
 }
+
+module "app_service" {
+  source              = "../"
+  name                = "mentoria-iac-bot"
+  resource_group_name = "mentoria-iac"
+  app_service_plan_id = azurerm_app_service_plan.app.id
+  docker_image        = "httpd:latest"
+}
+
+

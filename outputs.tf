@@ -1,3 +1,3 @@
-output "order_id" {
-  value = resource.hashicups_order.order.id
+output "id" {
+  value = azurerm_app_service.app.id
 }

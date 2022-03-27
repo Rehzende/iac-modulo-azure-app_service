@@ -28,5 +28,3 @@ module "app_service" {
   app_service_plan_id = azurerm_app_service_plan.app.id
   docker_image        = "httpd:latest"
 }
-
-

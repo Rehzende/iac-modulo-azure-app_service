@@ -33,6 +33,6 @@ variable "docker_registry_server_password" {
 }
 
 variable "docker_image" {
-  type = string
+  type    = string
   default = "nginx:latest"
 }

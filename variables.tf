@@ -28,7 +28,7 @@ variable "docker_registry_server_username" {
 
 variable "docker_registry_server_password" {
   type      = string
-  default   = ""
+  default   = "" #tfsec:ignore:GEN001 Ignorado pois o valor default é nulo
   sensitive = true
 }
 

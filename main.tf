@@ -2,25 +2,24 @@ data "azurerm_resource_group" "rg" {
   name = var.resource_group_name
 }
 
-resource "azurerm_app_service" "app" {
+resource "azurerm_linux_web_app" "app" {
   name                = var.name
   location            = data.azurerm_resource_group.rg.location
   resource_group_name = data.azurerm_resource_group.rg.name
-  app_service_plan_id = var.app_service_plan_id
+  service_plan_id     = var.app_service_plan_id
 
   site_config {
-    linux_fx_version = "DOCKER|${var.docker_image}"
+    always_on = true
+
+    application_stack {
+      docker_image     = var.docker_image
+      docker_image_tag = var.docker_image_tag
+    }
   }
+
   app_settings = {
     DOCKER_REGISTRY_SERVER_URL      = var.docker_registry_server_url
     DOCKER_REGISTRY_SERVER_USERNAME = var.docker_registry_server_username
     DOCKER_REGISTRY_SERVER_PASSWORD = var.docker_registry_server_password
-  }
-
-  lifecycle {
-    ignore_changes = [
-      #
-      site_config,
-    ]
   }
 }
